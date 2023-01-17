@@ -10,4 +10,5 @@ def output(path, withoutExtension, data, encode):
     with open(filePath + fileName, 'w', newline='', encoding=encode) as f:
         writer = csv.writer(f, lineterminator='\n')
         writer.writerows(data)
+    print(f'success: {filePath + fileName}')
     print('------')

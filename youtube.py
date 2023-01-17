@@ -2,11 +2,14 @@ from apiclient.discovery import build
 import math
 import utils
 import copy
-import myToken
 
-youtube = build('youtube', 'v3', developerKey=myToken.my_token)
+client: any
 headerList = []
 outputList = []
+
+def createInstance(apiKey: str):
+    global client
+    client = build('youtube', 'v3', developerKey=apiKey)
 
 def search(
     searchWords,
@@ -75,7 +78,7 @@ def searchList(
     nextPageToken = None,
 ):
     if (nextPageToken is None):
-        search_response = youtube.search().list(
+        search_response = client.search().list(
             part=part,
             q=searchWords,
             order=descendingType,
@@ -86,7 +89,7 @@ def searchList(
         ).execute()
         return search_response
     else:
-        search_response = youtube.search().list(
+        search_response = client.search().list(
             part=part,
             q=searchWords,
             order=descendingType,
@@ -142,7 +145,7 @@ def appendKey(tag):
                 appendCount += 1
 
 def videosList(part, videoId):
-    fetch_response = youtube.videos().list(
+    fetch_response = client.videos().list(
         part=part,
         id=videoId,
     ).execute()
