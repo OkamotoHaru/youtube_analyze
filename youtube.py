@@ -2,9 +2,9 @@ from apiclient.discovery import build
 import math
 import utils
 import copy
+import myToken
 
-token='あなたのAPI Key'
-youtube = build('youtube', 'v3', developerKey=token)
+youtube = build('youtube', 'v3', developerKey=myToken.my_token)
 headerList = []
 outputList = []
 
