@@ -1,10 +1,14 @@
 import csvClient
 import youtube
 import utils
+import sys
 
 def main():
+    args = sys.argv
+    apiKey= args[1] if len(args) > 1 else ''
     publishedAfter=utils.lastYear()
     publishedBefore=utils.yesterdayLastDate()
+    youtube.createInstance(apiKey)
     csvData = youtube.search(
         searchWords='モトブログ',
         publishedAfter=publishedAfter,
