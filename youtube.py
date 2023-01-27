@@ -4,12 +4,15 @@ import utils
 import copy
 
 client: any
+returnCode = ''
 headerList = []
 outputList = []
 
-def createInstance(apiKey: str):
+def createInstance(apiKey: str, _returnCode: str):
     global client
     client = build('youtube', 'v3', developerKey=apiKey)
+    global returnCode
+    returnCode = _returnCode
 
 def search(
     searchWords,
@@ -55,7 +58,7 @@ def search(
             videoSnippetResult = videosList('snippet', videoId)
             videoSnippetItems = videoSnippetResult['items']
             for itemDict in videoSnippetItems:
-                appendList('videos.list.snippe_t', itemDict)
+                appendList('videos.list.snippet', itemDict)
             # いいね数や再生数など取得
             videoStatisticsResult = videosList('statistics', videoId)
             videoStatisticsItems = videoStatisticsResult['items']
@@ -66,6 +69,8 @@ def search(
     outputList.insert(0, headerList)
     print('------')
     return outputList
+
+# API
 
 def searchList(
     part: str,
@@ -101,6 +106,15 @@ def searchList(
         ).execute()
         return search_response
 
+def videosList(part, videoId):
+    fetch_response = client.videos().list(
+        part=part,
+        id=videoId,
+    ).execute()
+    return fetch_response
+
+# Utility
+
 def appendList(tag, item):
     for key, value in item.items():
         addTag = f'{tag}.{key}'
@@ -109,7 +123,8 @@ def appendList(tag, item):
             appendList(addTag, value)
         elif (type(value) is str):
             # スプレッドシート上でCSVとして読み込むときに改行されてしまうため、別の文字に置き換える
-            addValue = value.replace('\n', 'uchidamasato')
+            global returnCode
+            addValue = value.replace('\n', returnCode)
             # 値としてのカンマはCSVの都合上セル分けされてしまうため、句読点に置き換える
             addValue = addValue.replace(',', '、')
             appendItemValueList(addTag, addValue)
@@ -143,10 +158,3 @@ def appendKey(tag):
             for n in range(diff):
                 itemValuesList.append('')
                 appendCount += 1
-
-def videosList(part, videoId):
-    fetch_response = client.videos().list(
-        part=part,
-        id=videoId,
-    ).execute()
-    return fetch_response

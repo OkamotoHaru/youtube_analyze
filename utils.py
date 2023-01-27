@@ -21,3 +21,16 @@ def lastYear():
     last = dt_now - relativedelta(years=1)
     formatted = last.strftime('%Y-%m-%dT00:00:00Z')
     return formatted
+
+def containsOr(list, words):
+    result = False
+    for item in list:
+        for word in words:
+            # test = word in item
+            # print(f'item: {item} word: {word} in: {test}')
+            if word in item:
+                result = True
+                break
+        if result == True:
+            break
+    return result

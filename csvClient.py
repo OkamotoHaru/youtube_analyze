@@ -1,5 +1,4 @@
 import csv
-import pprint
 import os
 
 def output(path, withoutExtension, data, encode):
@@ -8,7 +7,10 @@ def output(path, withoutExtension, data, encode):
     filePath = os.getcwd() + path
     os.makedirs(filePath, exist_ok=True)
     with open(filePath + fileName, 'w', newline='', encoding=encode) as f:
-        writer = csv.writer(f, lineterminator='\n')
+        writer = csv.writer(
+            f,
+            lineterminator='\n',
+        )
         writer.writerows(data)
     print(f'success: {filePath + fileName}')
     print('------')
